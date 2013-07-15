@@ -1,3 +1,3 @@
 EnderCreators
 =============
-A MySQL permission plugin
+A MySQL permission plugin by EnderCreators
