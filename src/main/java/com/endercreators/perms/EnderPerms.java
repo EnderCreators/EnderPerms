@@ -8,12 +8,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class EnderPerms extends JavaPlugin {
 
     private MySQLManager mysqlmanager;
+    private RunThread thread = null;
 
     public HashMap<String, List<String>> cachegroup = new HashMap<String, List<String>>();
 
@@ -30,8 +32,21 @@ public class EnderPerms extends JavaPlugin {
         }
 
 
-        mysqlmanager = new MySQLManager(this);
+        thread = new RunThread("EnderPerms");
+        thread.start();
 
+        go(new Runnable() {
+            @Override
+            public void run() {
+                getLogger().info("test");
+            }
+        });
+        getLogger().info("go");
+        if (thread == null)
+            getLogger().info("nope " + thread.getName());
+
+
+        mysqlmanager = new MySQLManager(this);
         if (getConfig().getLong("refresh") < 60)
             getLogger().info("Warning: Refresh time is under 60 secs.");
 
@@ -44,7 +59,7 @@ public class EnderPerms extends JavaPlugin {
     }
 
     public void go(Runnable runnable) {
-        Bukkit.getScheduler().runTaskLater(this, runnable, 0);
+        thread.run(runnable);
     }
 
     public MySQLManager getMySQLManager() {
@@ -70,7 +85,7 @@ public class EnderPerms extends JavaPlugin {
 
     @Override
     public void onDisable() {
-
+        thread.stop();
     }
 
     public void refresh() {
@@ -85,6 +100,7 @@ public class EnderPerms extends JavaPlugin {
                     if (special != null)
                         addToGroup(player, special);
                     addToGroup(player, getConfig().getString("default"));
+
                 }
             }
         });
@@ -94,6 +110,8 @@ public class EnderPerms extends JavaPlugin {
     public void addToGroup(Player player, String group) {
         perms.playerAddGroup("NULL", player.getName(), group);
         List<String> groups = cachegroup.get(player.getName());
+        if (groups == null)
+            groups = new ArrayList<String>();
         groups.add(group);
         cachegroup.remove(player.getName());
         cachegroup.put(player.getName(), groups);
@@ -102,6 +120,8 @@ public class EnderPerms extends JavaPlugin {
     public void removeFromGroup(Player player, String group) {
         perms.playerRemoveGroup("NULL", player.getName(), group);
         List<String> groups = cachegroup.get(player.getName());
+        if (groups == null)
+            groups = new ArrayList<String>();
         groups.remove(group);
         cachegroup.remove(player.getName());
         cachegroup.put(player.getName(), groups);
@@ -109,8 +129,12 @@ public class EnderPerms extends JavaPlugin {
 
     public void removeFromAllGroups(Player player) {
         List<String> groups = cachegroup.get(player.getName());
+        if (groups == null)
+            groups = new ArrayList<String>();
         for (String group : groups) {
+            player.sendMessage("G: " + group);
             removeFromGroup(player, group);
+
         }
         cachegroup.remove(player.getName());
     }

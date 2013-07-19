@@ -20,8 +20,6 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerJoin(final PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        for (String group : plugin.getGroups())
-            player.sendMessage("Group: " + group);
     }
 
     // Quit

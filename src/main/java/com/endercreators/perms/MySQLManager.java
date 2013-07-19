@@ -34,19 +34,14 @@ public class MySQLManager {
         try {
             String uri = "jdbc:mysql://" + host + "/" + database;
             conn = DriverManager.getConnection(uri, user, pass);
+            fix();
             return conn;
         } catch (Exception ex) {
+            System.out.println("[MySQL] Error caused in MySQL. Cannot connect to database.. Make sure that database '" + database + "' exist.");
         }
 
-        try {
-            fix();
-            String uri = "jdbc:mysql://" + host + "/" + database;
-            conn = DriverManager.getConnection(uri, user, pass);
-            return conn;
-        } catch (Exception ex2) {
-        }
 
-        System.out.println("[MySQL] Error caused in MySQL. Cannot connect to database.. Make sure that database '" + database + "' exist.");
+
 
         return conn;
     }
@@ -96,7 +91,7 @@ public class MySQLManager {
             Connection conn = DriverManager.getConnection(uri, user, pass);
             conn.createStatement().execute("CREATE TABLE IF NOT EXISTS `"
                     + database
-                    + "`.groups` ( `player` VARCHAR(32) NOT NULL, `group` VARCHAR(32))");
+                    + "`.groups ( `player` VARCHAR(32) NOT NULL, `group` VARCHAR(32))");
         } catch (Exception e) {
             System.out.println("[MySQL] Error caused while setting up table. Make sure that the database exist. Error: " + e);
         }
