@@ -1,0 +1,17 @@
+name: EnderPerms
+main: com.endercreators.perms.EnderPerms
+version: 0.1
+description: A MySQL permission plugin
+author: EnderCreators
+
+depend: [Vault]
+
+commands:
+    perm:
+        aliases: [perms]
+        description: EnderPerms' main command
+        usage: /<command>
+    setgroup:
+        aliases: [addpackage]
+        description: Set a player's group
+        usage: /<command> <player> <group>

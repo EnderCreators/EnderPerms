@@ -1,0 +1,20 @@
+mysql:
+    host: example.com
+    port: 3306
+    database: perms
+    user: user
+    pass: pass
+
+# Default group.
+default: player
+
+# Time in seconds. Beware: don't go under 60 secs.
+refresh:
+
+#TODO: Add chat stuff
+chat:
+    format: "<[%prefix]%player> %message"
+
+# Note: Group names cannot be longer than 32 characters. Player names should not be longer than 32 characters too. (Offline servers).
+
+groups:
