@@ -24,7 +24,7 @@ public class EnderPerms extends JavaPlugin {
     public void onEnable() {
 
         this.saveDefaultConfig();
-        if ((!setupPermissions()) || (!setupChat())) {
+        if (!setupPermissions()) {
             getLogger().info("Stopping plugin. Vault not found.");
             return;
         }
