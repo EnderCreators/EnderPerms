@@ -8,13 +8,21 @@ mysql:
 # Default group.
 default: player
 
-# Time in seconds. Beware: don't go under 60 secs.
-refresh:
+# Time in seconds. Beware: under 60 secs will cause more lag.
+refresh: 180
 
 #TODO: Add chat stuff
 chat:
-    format: "<[%prefix]%player> %message"
+    format: "<%prefix%player%suffix> %message"
 
 # Note: Group names cannot be longer than 32 characters. Player names should not be longer than 32 characters too. (Offline servers).
 
 groups:
+    player:
+        perms:
+        - bukkit.broadcast.user
+        prefix: ''
+    admin:
+        perms:
+        - bukkit.command.ban
+        prefix: '[Admin]'

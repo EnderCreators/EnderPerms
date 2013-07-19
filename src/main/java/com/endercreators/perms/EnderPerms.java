@@ -22,6 +22,8 @@ public class EnderPerms extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        this.saveDefaultConfig();
         setupPermissions();
         setupChat();
 
@@ -107,5 +109,9 @@ public class EnderPerms extends JavaPlugin {
             removeFromGroup(player, group);
         }
         cachegroup.remove(player.getName());
+    }
+
+    public List<String> getGroups(){
+        return getConfig().getStringList("groups");
     }
 }
