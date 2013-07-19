@@ -24,8 +24,11 @@ public class EnderPerms extends JavaPlugin {
     public void onEnable() {
 
         this.saveDefaultConfig();
-        setupPermissions();
-        setupChat();
+        if ((!setupPermissions()) || (!setupChat())) {
+            getLogger().info("Stopping plugin. Vault not found.");
+            return;
+        }
+
 
         mysqlmanager = new MySQLManager(this);
 
@@ -52,17 +55,18 @@ public class EnderPerms extends JavaPlugin {
         return this;
     }
 
+    private boolean setupChat() {
+        RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
+        chat = rsp.getProvider();
+        return chat != null;
+    }
+
     private boolean setupPermissions() {
         RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
         perms = rsp.getProvider();
         return perms != null;
     }
 
-    private boolean setupChat() {
-        RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
-        chat = rsp.getProvider();
-        return chat != null;
-    }
 
     @Override
     public void onDisable() {
@@ -111,7 +115,7 @@ public class EnderPerms extends JavaPlugin {
         cachegroup.remove(player.getName());
     }
 
-    public List<String> getGroups(){
+    public List<String> getGroups() {
         return getConfig().getStringList("groups");
     }
 }
