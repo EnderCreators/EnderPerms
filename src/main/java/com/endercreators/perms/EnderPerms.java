@@ -72,7 +72,12 @@ public class EnderPerms extends JavaPlugin {
             public void run() {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     removeFromAllGroups(player);
-                    addToGroup(player, getMySQLManager().getGroup(player.getName()));
+                }
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    removeFromAllGroups(player);
+                    String special = getMySQLManager().getGroup(player.getName());
+                    if (special != null)
+                        addToGroup(player, special);
                     addToGroup(player, getConfig().getString("default"));
                 }
             }
@@ -81,7 +86,7 @@ public class EnderPerms extends JavaPlugin {
     }
 
     public void addToGroup(Player player, String group) {
-        perms.playerAddGroup(player, group);
+        perms.playerAddGroup("NULL", player.getName(), group);
         List<String> groups = cachegroup.get(player.getName());
         groups.add(group);
         cachegroup.remove(player.getName());
@@ -89,7 +94,7 @@ public class EnderPerms extends JavaPlugin {
     }
 
     public void removeFromGroup(Player player, String group) {
-        perms.playerRemoveGroup(player, group);
+        perms.playerRemoveGroup("NULL", player.getName(), group);
         List<String> groups = cachegroup.get(player.getName());
         groups.remove(group);
         cachegroup.remove(player.getName());
